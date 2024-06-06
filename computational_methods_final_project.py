@@ -79,7 +79,7 @@ for row1, row2 in zip(baseTenList,biList):
 plt.figure(1)
 x = np.arange(0, 20.1, 0.1)
 y = x ** 2 * np.exp(-1 / 2 * x)
-plt.scatter(np.arange(0.1, 0.9, 0.1), baseTenList)
+plt.scatter(np.arange(0.1, 0.9, 0.1), baseTenList, s=100)
 plt.xlabel('Time(ms)')
 plt.ylabel("Charge(mC)")
 plt.show()
@@ -116,7 +116,80 @@ for index, value in enumerate(baseTenList):
     else:
         fPrime.append((value-baseTenList[index - 1])/0.1)
 
-print(fPrime)
+plt.figure(3)
+plt.plot(np.arange(0.1, 0.9, 0.1),fPrime, linewidth = 5)
+plt.xlabel('Time(ms)')
+plt.ylabel("Current(Amperes)")
+plt.show()
+
+data = open("Data_Chapter3.txt", "r")
+
+#Cleaning up data and organizing it.
+
+timeList = []
+currentList = []
+for line in data:
+    line = line.strip().split('\t')
+    timeList.append(float(line[0]))
+    currentList.append(float(line[1]))
+
+#plotting data
+
+plt.plot(timeList,currentList)
+plt.xlabel("time")
+plt.ylabel("current")
+# plt.xlim(0, 7)
+# plt.ylim(-5, 5)
+plt.xticks(np.arange(0, 8, 1))
+plt.yticks(np.arange(-4, 4, 1))
+plt.show()
+
+
+#Bisection method
+
+#Inital Conditions
+lowX = 1
+highX = 4
+
+#initalize variables
+lowXCurrent = 0
+highXCurrent = 0
+meanX = 0
+meanXList = []
+
+for i in range(15): #Iterating for 15 times
+    meanCurrent = None
+    meanX = (lowX + highX)/2
+    meanXList.append(meanX)
+    for index, line in enumerate(timeList): #Checks every time value in TimeList and assigns the time values to corresponding current values
+        if line == lowX:
+            lowXCurrent = currentList[index]
+        if line == highX:
+            highXCurrent = currentList[index]
+        if line == meanX:
+            meanCurrent = currentList[index]
+    if meanCurrent == None:
+        print(f'Mean time value of {meanX} not found in data set')
+        break
+    if lowXCurrent < 0 and meanCurrent < 0 or lowXCurrent > 0 and meanCurrent > 0:
+        lowX = meanX
+    elif highXCurrent < 0 and meanCurrent < 0 or highXCurrent > 0 and meanCurrent > 0:
+        highX = meanX
+    print(meanX)
+
+plt.plot(range(len(meanXList)),meanXList)
+plt.xlabel("iteration")
+plt.ylabel("aprx root value")
+plt.xticks(np.arange(0, 16, 1))
+plt.yticks(np.arange(2.5, 3.3, 0.1))
+plt.show()
+
+
+
+
+
+
+
 
 
 
