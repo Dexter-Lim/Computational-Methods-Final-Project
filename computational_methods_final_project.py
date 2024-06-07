@@ -160,6 +160,7 @@ meanXList = []
 for i in range(15): #Iterating for 15 times
     meanCurrent = None
     meanX = (lowX + highX)/2
+    meanX = round(meanX,3)
     meanXList.append(meanX)
     for index, line in enumerate(timeList): #Checks every time value in TimeList and assigns the time values to corresponding current values
         if line == lowX:
